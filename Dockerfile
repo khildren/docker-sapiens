@@ -32,4 +32,4 @@ WORKDIR /home/sapiens
 COPY entrypoint.sh /home/sapiens/
 # if i dont switch back to root, entrypoint throws segmentationfault
 USER root
-ENTRYPOINT /home/sapiens/entrypoint.sh
+ENTRYPOINT ["/home/sapiens/entrypoint.sh"]
