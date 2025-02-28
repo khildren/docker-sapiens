@@ -30,6 +30,7 @@ RUN mkdir -p /home/sapiens/.local/share/majicjungle/
 WORKDIR /home/sapiens
 
 COPY entrypoint.sh /home/sapiens/
+RUN chmod +x /home/sapiens/entrypoint.sh
 # if i dont switch back to root, entrypoint throws segmentationfault
 USER root
 ENTRYPOINT ["/home/sapiens/entrypoint.sh"]
