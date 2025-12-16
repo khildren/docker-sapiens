@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Container version="2">
+  <Name>Sapiens Dedicated Server</Name>
+  <Repository>yourdockerhubuser/sapiens</Repository>
+  <Registry>https://hub.docker.com</Registry>
+  <Network>bridge</Network>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+
+  <Overview>
+    Sapiens Dedicated Server (Public Mode)
+
+    • Forces PUBLIC server mode (no LAN fallback)
+    • Direct IP connections work immediately
+    • Public server listing may take time to propagate
+  </Overview>
+
+  <Category>GameServers</Category>
+
+  <Config Name="UDP Port" Target="16161" Default="16161" Mode="udp" Description="Sapiens server UDP port" Type="Port" Display="always" Required="true"/>
+
+  <Config Name="Public Mode" Target="PUBLIC_MODE" Default="true" Mode="rw" Description="Force public server listing" Type="Variable" Display="always" Required="true"/>
+
+  <Config Name="Bug Report Opt-In" Target="BUGREPORT_OPTIN" Default="true" Mode="rw" Description="Opt in to sending crash reports to help developers" Type="Variable" Display="advanced"/>
+
+  <Config Name="Server Data" Target="/root/.local/share/majicjungle/sapiens" Default="/mnt/user/appdata/sapiens" Mode="rw" Description="Persistent Sapiens server data" Type="Path" Display="always" Required="true"/>
+
+  <ExtraParams>--restart unless-stopped</ExtraParams>
+
+</Container>

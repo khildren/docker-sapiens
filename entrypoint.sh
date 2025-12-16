@@ -1,23 +1,29 @@
-#!/bin/bash
-# VARIABLES
-GAME_DIR="/appdata/sapiens/server"
+#!/usr/bin/env bash
+set -e
 
-echo "-------------------------------INSTALL & UPDATE------------------------------"
-/usr/games/steamcmd +force_install_dir ${GAME_DIR} +login anonymous +app_update 2886350 +quit
+echo "=== Sapiens Dedicated Server Entrypoint ==="
 
-echo "----------------------------------START GAME---------------------------------"
-cd ${GAME_DIR}
+# Defaults
+UDP_PORT="${UDP_PORT:-16161}"
+PUBLIC_MODE="${PUBLIC_MODE:-true}"
+BUGREPORT_OPTIN="${BUGREPORT_OPTIN:-true}"
 
-WORLD_COUNT=$(./linuxServer -l | grep "${WORLD_NAME}" | wc -l)
+ARGS=()
 
-if [ "${WORLD_COUNT}" -gt "0" ]; then 
-  echo "World found, loading"
-  ./linuxServer -o "${WORLD_NAME}" "${ARG_DEBUG}" "${ARG_ADVERTISE}" "${ARG_SERVER_ID}" "${ARG_PORT}" "${ARG_HTTP}"
+if [[ "$PUBLIC_MODE" == "true" ]]; then
+  ARGS+=("-public")
+  echo "Starting in PUBLIC mode"
 else
-  echo "World not found, creating"
-  ./linuxServer -n "${WORLD_NAME}" -s "${WORLD_SEED}" "${ARG_DEBUG}" "${ARG_ADVERTISE}" "${ARG_SERVER_ID}" "${ARG_PORT}" "${ARG_HTTP}"
+  echo "Starting in PRIVATE/LAN mode"
 fi
 
-echo "-----------------------------------END GAME----------------------------------"
-sleep 1
-echo "-----------------------------------BYE !!!!----------------------------------"
+if [[ "$BUGREPORT_OPTIN" == "true" ]]; then
+  ARGS+=("-y")
+fi
+
+ARGS+=("-port" "$UDP_PORT")
+
+echo "Launch args: ${ARGS[*]}"
+echo "========================================="
+
+exec /app/SapiensDedicatedServer "${ARGS[@]}"
